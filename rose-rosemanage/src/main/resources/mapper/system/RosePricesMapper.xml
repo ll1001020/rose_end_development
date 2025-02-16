@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rose.system.mapper.RosePricesMapper">
+    
+    <resultMap type="RosePrices" id="RosePricesResult">
+        <result property="id"    column="id"    />
+        <result property="rosePrices"    column="rose_prices"    />
+        <result property="roseVarieties"    column="rose_varieties"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectRosePricesVo">
+        select id, rose_prices, rose_varieties, create_time, update_time, create_by, update_by, remark from rose_rose_prices
+    </sql>
+
+    <select id="selectRosePricesList" parameterType="RosePrices" resultMap="RosePricesResult">
+        <include refid="selectRosePricesVo"/>
+        <where>  
+            <if test="rosePrices != null  and rosePrices != ''"> and rose_prices = #{rosePrices}</if>
+            <if test="roseVarieties != null  and roseVarieties != ''"> and rose_varieties = #{roseVarieties}</if>
+        </where>
+    </select>
+    
+    <select id="selectRosePricesById" parameterType="Long" resultMap="RosePricesResult">
+        <include refid="selectRosePricesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertRosePrices" parameterType="RosePrices">
+        insert into rose_rose_prices
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="rosePrices != null and rosePrices != ''">rose_prices,</if>
+            <if test="roseVarieties != null and roseVarieties != ''">rose_varieties,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="rosePrices != null and rosePrices != ''">#{rosePrices},</if>
+            <if test="roseVarieties != null and roseVarieties != ''">#{roseVarieties},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRosePrices" parameterType="RosePrices">
+        update rose_rose_prices
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rosePrices != null and rosePrices != ''">rose_prices = #{rosePrices},</if>
+            <if test="roseVarieties != null and roseVarieties != ''">rose_varieties = #{roseVarieties},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRosePricesById" parameterType="Long">
+        delete from rose_rose_prices where id = #{id}
+    </delete>
+
+    <delete id="deleteRosePricesByIds" parameterType="String">
+        delete from rose_rose_prices where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
