@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rose.system.mapper.RoseVarietiesMapper">
+    
+    <resultMap type="RoseVarieties" id="RoseVarietiesResult">
+        <result property="id"    column="id"    />
+        <result property="roseVarieties"    column="rose_varieties"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectRoseVarietiesVo">
+        select id, rose_varieties, create_time, update_time, create_by, update_by, remark from rose_rose_varieties
+    </sql>
+
+    <select id="selectRoseVarietiesList" parameterType="RoseVarieties" resultMap="RoseVarietiesResult">
+        <include refid="selectRoseVarietiesVo"/>
+        <where>  
+            <if test="roseVarieties != null  and roseVarieties != ''"> and rose_varieties = #{roseVarieties}</if>
+        </where>
+    </select>
+    
+    <select id="selectRoseVarietiesById" parameterType="Long" resultMap="RoseVarietiesResult">
+        <include refid="selectRoseVarietiesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertRoseVarieties" parameterType="RoseVarieties">
+        insert into rose_rose_varieties
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="roseVarieties != null and roseVarieties != ''">rose_varieties,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="roseVarieties != null and roseVarieties != ''">#{roseVarieties},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRoseVarieties" parameterType="RoseVarieties">
+        update rose_rose_varieties
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roseVarieties != null and roseVarieties != ''">rose_varieties = #{roseVarieties},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRoseVarietiesById" parameterType="Long">
+        delete from rose_rose_varieties where id = #{id}
+    </delete>
+
+    <delete id="deleteRoseVarietiesByIds" parameterType="String">
+        delete from rose_rose_varieties where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
